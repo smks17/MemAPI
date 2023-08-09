@@ -41,7 +41,7 @@ class TestAPI:
             params=form_data,
             headers={ 'Content-Type': 'application/x-www-form-urlencoded'}
         )
-        assert response.status_code == 200
+        assert response.status_code == 201
         assert response.json()["message"] == "Your account has been created successfully!"
 
     @pytest.fixture()
@@ -105,7 +105,7 @@ class TestAPI:
     def test_create_token(self, create_fake_token):
         """It tests the request to get a token"""
         response = create_fake_token()
-        assert response.status_code == 200
+        assert response.status_code == 201
         assert response.json()["token_type"] == "bearer"
         assert response.json()["access_token"] != ""
 
@@ -125,7 +125,7 @@ class TestAPI:
     def test_use_token(self, create_fake_token):
         """It tests a valid token to get its own user by API"""
         response = create_fake_token()
-        assert response.status_code == 200
+        assert response.status_code == 201
         token = response.json()["access_token"]
         response = client.get("/users/me", headers={"Authorization": f'Bearer {token}'})
         assert response.status_code == 200
@@ -141,7 +141,7 @@ class TestAPI:
     def test_getting_memory(self, create_fake_token):
         """It tests getting memory information from database."""
         response = create_fake_token()
-        assert response.status_code == 200
+        assert response.status_code == 201
         token = response.json()["access_token"]
         response = client.get("/memory/info?limit=1",
                               headers={"Authorization": f'Bearer {token}'})

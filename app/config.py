@@ -24,7 +24,7 @@ class AppSettings(BaseSettings):
     class Token(BaseSettings):
         """Configs to use in token creation and validation"""
         # Your secret key to generate token for users
-        secret_key: str = "Your Secret Key"
+        secret_key: str = "Mahdi Kashani"
         # algorithm to use in token creation
         algorithm: str = "HS256"
         # time in which is valid

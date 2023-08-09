@@ -21,6 +21,7 @@ class Memory(MemBase):
 
 
 class ListOfMemory(BaseModel):
+    """contains a list of memory for query"""
     mem_data: List[Memory]
 
 

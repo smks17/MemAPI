@@ -10,9 +10,22 @@ import app.routers.user as users_router
 import app.routers.mem as mem_router
 
 
+tags_metadata = [
+    {
+        "name": "users",
+        "description": "Operations with users. The **login** and **register** logic and"
+                        "also **creating** token to work with tha API are here.",
+    },
+    {
+        "name": "memory",
+        "description": "Getting memory info.",
+    },
+]
+
 app = FastAPI(
     debug=settings.debug,
-    **(info_settings.model_dump())
+    openapi_tags=tags_metadata,
+    **(info_settings.model_dump()),
 )
 
 
@@ -38,3 +51,5 @@ async def shutdown():
 async def shutdown():
     # cancel the logging memory task
     task.cancel()
+
+# TODO: Add runner in main and use setup.py
