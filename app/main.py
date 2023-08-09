@@ -16,7 +16,8 @@ app = FastAPI(
 )
 
 # runs tracking memory usage by asynchronous
-task = asyncio.create_task(log_memory_usage(), name="log_mem")
+loop = asyncio.new_event_loop()
+task = loop.create_task(log_memory_usage(), name="log_mem")
 
 # add routers
 app.include_router(router=users_router.router)
