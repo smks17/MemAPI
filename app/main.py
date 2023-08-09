@@ -15,9 +15,6 @@ app = FastAPI(
     **(info_settings.model_dump())
 )
 
-# runs tracking memory usage by asynchronous
-loop = asyncio.new_event_loop()
-task = loop.create_task(log_memory_usage(), name="log_mem")
 
 # add routers
 app.include_router(router=users_router.router)
@@ -27,6 +24,15 @@ app.include_router(router=mem_router.router)
 @app.get("/")
 async def root():
     return {"message": "Hello, This is a test of API task. For usage see '/docs'"}
+
+task: asyncio.Task = None
+
+@app.on_event("startup")
+async def shutdown():
+    global task
+    # runs tracking memory usage by asynchronous
+    loop = asyncio.get_event_loop()
+    task = loop.create_task(log_memory_usage(), name="log_mem")
 
 @app.on_event("shutdown")
 async def shutdown():

@@ -30,7 +30,7 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 def get_mem(db: Session, limit: int = 5) -> schemas.ListOfMemory:
     """Returns last n memory usage that were logged"""
-    q = db.query(models.Memory)
+    q = db.query(models.Memory).order_by(models.Memory.time.desc())
     mem_data = q.limit(limit).all()
     mem_data = [schemas.Memory(**(mem.__dict__)) for mem in mem_data]
     return schemas.ListOfMemory(mem_data=mem_data)
