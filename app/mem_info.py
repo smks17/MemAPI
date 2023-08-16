@@ -1,4 +1,5 @@
 ﻿import asyncio
+import datetime
 import logging
 import subprocess
 from typing import Tuple, Optional
@@ -43,7 +44,10 @@ async def log_memory_usage():
         if usage:
             total, used, free = usage
             logging.info(f"total: {total} - used: {used} - free: {free}")
-            memory_info = schemas.MemCreate(free=free, used=used, total=total)
+            memory_info = schemas.MemCreate(time = datetime.datetime.now(),
+                                            free=free,
+                                            used=used,
+                                            total=total)
             crud.create_memory(get_db(), memory_info)
         # await for some minutes to check memory again
         await asyncio.sleep(settings.delta_time_check_memory.seconds)

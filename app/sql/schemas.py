@@ -11,11 +11,10 @@ class MemBase(BaseModel):
 
 
 class MemCreate(MemBase):
-    pass
-
-
-class Memory(MemBase):
     time: datetime
+
+
+class Memory(MemCreate):
     class Config:
         orm_mode = True
 
@@ -27,10 +26,10 @@ class ListOfMemory(BaseModel):
 
 class UserBase(BaseModel):
     username: str
+    email: str
 
 
 class UserCreate(UserBase):
-    email: str
     password: str
 
 

@@ -37,8 +37,7 @@ def get_mem(db: Session, limit: int = 5) -> schemas.ListOfMemory:
 
 def create_memory(db: Session, memory: schemas.MemCreate):
     """create memory and insert to database"""
-    time = datetime.datetime.now()
-    db_mem = models.Memory(time=time, **(memory.dict()))
+    db_mem = models.Memory(**(memory.dict()))
     db.add(db_mem)
     db.commit()
     db.refresh(db_mem)

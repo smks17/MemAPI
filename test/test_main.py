@@ -67,6 +67,22 @@ class TestAPI:
         assert response.status_code == 406
         assert response.json()["detail"] == "This username is already exist!"
 
+    def test_try_create_duplicate_email(self, create_fake_accounts):
+        """It tests bad response for requesting duplicate username to register"""
+        fake_user = self.test_user
+        form_data = {
+            "username": "Mahdi",
+            "email": fake_user.email,
+            "password": fake_user.password
+        }
+        response = client.post(
+            "/users/register",
+            params=form_data,
+            headers={ 'Content-Type': 'application/x-www-form-urlencoded'}
+        )
+        assert response.status_code == 406
+        assert response.json()["detail"] == "This account is already exist!"
+
     def test_try_create_duplicate_user(self, create_fake_accounts):
         """It tests bad response for requesting duplicate user to register"""
         fake_user = self.test_user
@@ -131,7 +147,9 @@ class TestAPI:
         assert response.status_code == 200
         # This user creates in create_fake_user from create_fake_token
         fake_user = self.test_user
-        assert response.json() == {"username": fake_user.username, "activated": True}
+        assert response.json() == {"username": fake_user.username,
+                                   "email": fake_user.email,
+                                   "activated": True}
 
     def test_bad_use_token(self):
         """It tests a non-valid token to get its own user by API that should return an error."""

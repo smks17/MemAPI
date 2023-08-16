@@ -38,9 +38,9 @@ def authenticate_user(username: int, password: str) -> schemas.User:
     end return user object."""
     user = crud.get_user(get_db(), username)
     if not user:
-        return False
+        return None
     if not verify_password(password, user.password):
-        return False
+        return None
     return user
 
 def create_access_token(data: dict,
@@ -65,7 +65,7 @@ def create_access_token(data: dict,
         expire = datetime.datetime.now() + expires_delta
     else:
         expire = datetime.datetime.now() + token_settings.access_token_expire_minutes
-    to_encode.update({"exp": expire})
+    to_encode.update({"exp": expire.timestamp()})
     encoded_jwt = jwt.encode(to_encode,
                              token_settings.secret_key,
                              algorithm=token_settings.algorithm)
@@ -82,7 +82,7 @@ async def get_user_by_token(token: Annotated[str, Depends(oauth2_scheme)]) -> sc
         payload = jwt.decode(token,
                              token_settings.secret_key,
                              algorithms=[token_settings.algorithm])
-        username: str = payload.get("username")
+        username: str = payload.get("username", None)
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)

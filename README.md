@@ -54,6 +54,7 @@ For more information see `/docs`
     source env/bin/activate
     pip install -r requirements.txt
 ```
+بعد شما به تنظیم یک کلید خصوصی (و در صورت نیاز آدرس دیتابیس) که در `config.py` این کار را انجام دهید.
 
 سپس سرور را اجرا می کنیم:
 

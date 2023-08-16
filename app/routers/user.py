@@ -10,7 +10,7 @@ from ..dependencies import (
 )
 from ..sql import get_db
 from ..sql.schemas import User, UserCreate
-from ..sql.crud import get_user, create_user
+from ..sql.crud import get_user, get_user_by_email, create_user
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -46,6 +46,7 @@ async def signup(
         add and access users. But for now and for tests it is here.
     """
     # TODO: The password should pass from user in hashed.
+    # check user or username has already exited or not
     user = get_user(get_db(), form_data.username)
     if user is not None:
         if user.email == form_data.email:
@@ -56,6 +57,12 @@ async def signup(
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="This username is already exist!",
+        )
+    user = get_user_by_email(get_db(), form_data.email)
+    if user is not None:
+        raise HTTPException(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            detail="This account is already exist!",
         )
     # TODO: It should check email
     new_user = UserCreate(username=form_data.username,
